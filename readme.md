@@ -50,6 +50,6 @@ swechaind query issuemarket get-auction 0 --output json
 ### Make a Transaction 
 swechaind tx bank send alice $BOB 4000stake --from alice --yes
 
-### Check  inal Balances 
+### Check Final Balances 
 swechaind query bank balances alice --output json
 swechaind query bank balances bob --output json
