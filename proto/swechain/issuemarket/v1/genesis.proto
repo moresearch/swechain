@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package swechain.issuemarket.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "swechain/issuemarket/v1/params.proto";
+import "swechain/issuemarket/v1/auction.proto";
+import "swechain/issuemarket/v1/bid.proto";
+
+option go_package = "github.com/moresearch/swechain/x/issuemarket/types";
+
+// GenesisState defines the issuemarket module's genesis state.
+message GenesisState {
+  
+  // params defines all the parameters of the module.
+           Params  params       = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+  repeated Auction auctionList  = 2 [(gogoproto.nullable) = false] ;
+           uint64  auctionCount = 3;
+  repeated Bid     bidList      = 4 [(gogoproto.nullable) = false] ;
+}
+

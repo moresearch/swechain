@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package swechain.issuemarket.v1;
+
+import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "swechain/issuemarket/v1/params.proto";
+import "swechain/issuemarket/v1/auction.proto";
+import "swechain/issuemarket/v1/bid.proto";
+
+option go_package = "github.com/moresearch/swechain/x/issuemarket/types";
+
+// Msg defines the Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+  
+  // UpdateParams defines a (governance) operation for updating the module
+  // parameters. The authority defaults to the x/gov module account.
+  rpc UpdateParams  (MsgUpdateParams ) returns (MsgUpdateParamsResponse );
+  rpc CreateAuction (MsgCreateAuction) returns (MsgCreateAuctionResponse);
+  rpc UpdateAuction (MsgUpdateAuction) returns (MsgUpdateAuctionResponse);
+  rpc DeleteAuction (MsgDeleteAuction) returns (MsgDeleteAuctionResponse);
+  rpc CreateBid     (MsgCreateBid    ) returns (MsgCreateBidResponse    );
+  rpc UpdateBid     (MsgUpdateBid    ) returns (MsgUpdateBidResponse    );
+  rpc DeleteBid     (MsgDeleteBid    ) returns (MsgDeleteBidResponse    );
+}
+// MsgUpdateParams is the Msg/UpdateParams request type.
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) =                              "authority";
+  option           (amino.name) = "swechain/x/issuemarket/MsgUpdateParams";
+  
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // params defines the module parameters to update.
+  
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+}
+
+// MsgUpdateParamsResponse defines the response structure for executing a
+// MsgUpdateParams message.
+message MsgUpdateParamsResponse {}
+
+message MsgCreateAuction {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator     = 1;
+  string issue       = 2;
+  string description = 3;
+  string status      = 4;
+  string winner      = 5;
+}
+
+message MsgCreateAuctionResponse {
+  uint64 id = 1;
+}
+
+message MsgUpdateAuction {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator     = 1;
+  uint64 id          = 2;
+  string issue       = 3;
+  string description = 4;
+  string status      = 5;
+  string winner      = 6;
+}
+
+message MsgUpdateAuctionResponse {}
+
+message MsgDeleteAuction {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1;
+  uint64 id      = 2;
+}
+
+message MsgDeleteAuctionResponse {}
+
+message MsgCreateBid {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator     = 1;
+  string index       = 2;
+  string auctionId   = 3;
+  string bidder      = 4;
+  string amount      = 5;
+  string description = 6;
+}
+
+message MsgCreateBidResponse {}
+
+message MsgUpdateBid {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator     = 1;
+  string index       = 2;
+  string auctionId   = 3;
+  string bidder      = 4;
+  string amount      = 5;
+  string description = 6;
+}
+
+message MsgUpdateBidResponse {}
+
+message MsgDeleteBid {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1;
+  string index   = 2;
+}
+
+message MsgDeleteBidResponse {}
+

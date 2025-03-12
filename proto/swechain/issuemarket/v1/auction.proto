@@ -1,0 +1,13 @@
+syntax = "proto3";
+package swechain.issuemarket.v1;
+
+option go_package = "github.com/moresearch/swechain/x/issuemarket/types";
+
+message Auction {
+  uint64 id = 1;
+  string issue = 2; 
+  string description = 3; 
+  string status = 4; 
+  string winner = 5; 
+  string creator = 6;
+}

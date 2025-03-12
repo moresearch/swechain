@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package swechain.issuemarket.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "swechain/issuemarket/v1/params.proto";
+import "swechain/issuemarket/v1/auction.proto";
+import "swechain/issuemarket/v1/bid.proto";
+
+option go_package = "github.com/moresearch/swechain/x/issuemarket/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  
+  // Parameters queries the parameters of the module.
+  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/moresearch/swechain/issuemarket/v1/params";
+  
+  }
+  
+  // Queries a list of Auction items.
+  rpc GetAuction  (QueryGetAuctionRequest) returns (QueryGetAuctionResponse) {
+    option (google.api.http).get = "/moresearch/swechain/issuemarket/auction/{id}";
+  
+  }
+  rpc ListAuction (QueryAllAuctionRequest) returns (QueryAllAuctionResponse) {
+    option (google.api.http).get = "/moresearch/swechain/issuemarket/auction";
+  
+  }
+  
+  // Queries a list of Bid items.
+  rpc GetBid  (QueryGetBidRequest) returns (QueryGetBidResponse) {
+    option (google.api.http).get = "/moresearch/swechain/issuemarket/bid/{index}";
+  
+  }
+  rpc ListBid (QueryAllBidRequest) returns (QueryAllBidResponse) {
+    option (google.api.http).get = "/moresearch/swechain/issuemarket/bid";
+  
+  }
+}
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+}
+
+message QueryGetAuctionRequest {
+  uint64 id = 1;
+}
+
+message QueryGetAuctionResponse {
+  Auction Auction = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllAuctionRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllAuctionResponse {
+  repeated Auction                                Auction    = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetBidRequest {
+  string index = 1;
+}
+
+message QueryGetBidResponse {
+  Bid bid = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllBidRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllBidResponse {
+  repeated Bid                                    bid        = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
