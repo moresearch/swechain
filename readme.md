@@ -5,15 +5,19 @@
 `curl -sSL https://get.ignite.com/cli\! | sudo bash`
 
 
+GEX is a real time in-terminal explorer for Cosmos SDK blockchains. 
+`go install github.com/cosmos/gex@latest` 
+
+
 ## Get started
 
 ```
 ignite chain serve
 ```
 
-`serve` command installs dependencies, builds, initializes, and starts your blockchain in development.
+The `serve` command installs dependencies, builds, initializes, and starts your blockchain in development, i.e. `swechaind`.
 
-To install the latest version of your blockchain node's binary, run `ignite chain serve` in the repo dir.
+Run  `gex explorer` to view tx in real-time.
 
 
 ### Configure
