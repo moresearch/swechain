@@ -14,13 +14,16 @@ To install the latest version of your blockchain node's binary, run `ignite chai
 
 ### Configure
 
-Your blockchain in development can be configured with `config.yml`. 
-
+Your blockchain in development can be configured with `config.yml` to edit balances or add accounts for example. 
 
 
 ## Usage Example:
 ### Setup chain Id
 swechaind config set client chain-id swechain
+
+### Check Initial Balances
+swechaind query bank balances alice --output json
+swechaind query bank balances bob --output json
 
 ### Create accounts
 swechaind keys add alice
@@ -42,3 +45,11 @@ swechaind tx issuemarket update-auction 0 "BUG-123" "Fix critical security vulne
 
 ### View the closed auction
 swechaind query issuemarket get-auction 0 --output json
+
+
+### Make a Transaction 
+swechaind tx bank send alice $BOB 4000stake --from alice --yes
+
+### Check  inal Balances 
+swechaind query bank balances alice --output json
+swechaind query bank balances bob --output json
