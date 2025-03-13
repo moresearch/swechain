@@ -2,6 +2,10 @@
 **swechain** is a blockchain built using Cosmos SDK and Tendermint and created with [Ignite CLI](https://ignite.com/cli).
 
 ## Prerequisites
+
+Golang
+
+
 `curl -sSL https://get.ignite.com/cli\! | sudo bash`
 
 
@@ -11,16 +15,22 @@ GEX is a real time in-terminal explorer for Cosmos SDK blockchains.
 
 ## Get started
 
+
 ```
-ignite chain serve
+ignite chain build --release --release.targets="linux:amd64,windows:amd64"
 ```
 
-The `serve` command installs dependencies, builds, initializes, and starts your blockchain in development, i.e. `swechaind`.
 
-Run  `gex explorer` to view tx in real-time.
+```
+swechaind start
+```
 
 
-`ignite chain build --release --release.targets="linux:amd64,windows:amd64"`
+Run  to view transcations(tx) in real-time.
+
+```
+gex explorer 
+```
 
 
 ### Configure
@@ -32,13 +42,13 @@ Your blockchain in development can be configured with `config.yml` to edit balan
 ### Setup chain Id
 swechaind config set client chain-id swechain
 
-### Check Initial Balances
-swechaind query bank balances alice --output json
-swechaind query bank balances bob --output json
-
 ### Create accounts
 swechaind keys add alice
 swechaind keys add bob
+
+### Check Initial Balances
+swechaind query bank balances alice --output json
+swechaind query bank balances bob --output json
 
 ### Create an auction (Alice)
 swechaind tx issuemarket create-auction "BUG-123" "Fix critical security vulnerability" "open" "" --from alice --yes --output json
