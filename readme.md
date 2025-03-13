@@ -20,6 +20,9 @@ The `serve` command installs dependencies, builds, initializes, and starts your 
 Run  `gex explorer` to view tx in real-time.
 
 
+`ignite chain build --release --release.targets="linux:amd64,windows:amd64"`
+
+
 ### Configure
 
 Your blockchain in development can be configured with `config.yml` to edit balances or add accounts for example. 
