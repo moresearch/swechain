@@ -67,6 +67,8 @@ import (
 	icatypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
+	_ "github.com/moresearch/swechain/x/ipfs/module"
+	ipfsmoduletypes "github.com/moresearch/swechain/x/ipfs/types"
 	_ "github.com/moresearch/swechain/x/issuemarket/module"
 	issuemarketmoduletypes "github.com/moresearch/swechain/x/issuemarket/types"
 )
@@ -124,6 +126,7 @@ var (
 						ibcexported.ModuleName,
 						// chain modules
 						issuemarketmoduletypes.ModuleName,
+						ipfsmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
@@ -133,6 +136,7 @@ var (
 						group.ModuleName,
 						// chain modules
 						issuemarketmoduletypes.ModuleName,
+						ipfsmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
@@ -169,6 +173,7 @@ var (
 						icatypes.ModuleName,
 						// chain modules
 						issuemarketmoduletypes.ModuleName,
+						ipfsmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 				}),
@@ -263,6 +268,10 @@ var (
 			{
 				Name:   issuemarketmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&issuemarketmoduletypes.Module{}),
+			},
+			{
+				Name:   ipfsmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&ipfsmoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

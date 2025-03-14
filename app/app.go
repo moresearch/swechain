@@ -46,6 +46,7 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v10/modules/core/keeper"
 
 	"github.com/moresearch/swechain/docs"
+	ipfsmodulekeeper "github.com/moresearch/swechain/x/ipfs/keeper"
 	issuemarketmodulekeeper "github.com/moresearch/swechain/x/issuemarket/keeper"
 )
 
@@ -95,6 +96,7 @@ type App struct {
 	TransferKeeper      ibctransferkeeper.Keeper
 
 	IssuemarketKeeper issuemarketmodulekeeper.Keeper
+	IpfsKeeper        ipfsmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -172,6 +174,7 @@ func New(
 		&app.CircuitBreakerKeeper,
 		&app.ParamsKeeper,
 		&app.IssuemarketKeeper,
+		&app.IpfsKeeper,
 	); err != nil {
 		panic(err)
 	}

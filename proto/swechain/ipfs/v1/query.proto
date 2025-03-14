@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package swechain.ipfs.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "swechain/ipfs/v1/params.proto";
+import "swechain/ipfs/v1/coding_traj.proto";
+
+option go_package = "github.com/moresearch/swechain/x/ipfs/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  
+  // Parameters queries the parameters of the module.
+  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/moresearch/swechain/ipfs/v1/params";
+  
+  }
+  
+  // Queries a list of CodingTraj items.
+  rpc GetCodingTraj  (QueryGetCodingTrajRequest) returns (QueryGetCodingTrajResponse) {
+    option (google.api.http).get = "/moresearch/swechain/ipfs/coding_traj/{index}";
+  
+  }
+  rpc ListCodingTraj (QueryAllCodingTrajRequest) returns (QueryAllCodingTrajResponse) {
+    option (google.api.http).get = "/moresearch/swechain/ipfs/coding_traj";
+  
+  }
+}
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+}
+
+message QueryGetCodingTrajRequest {
+  string index = 1;
+}
+
+message QueryGetCodingTrajResponse {
+  CodingTraj codingTraj = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllCodingTrajRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllCodingTrajResponse {
+  repeated CodingTraj                             codingTraj = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+

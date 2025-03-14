@@ -74,3 +74,59 @@ swechaind tx bank send alice $BOB 4000stake --from alice --yes
 ### Check Final Balances 
 swechaind query bank balances alice --output json
 swechaind query bank balances bob --output json
+
+
+
+# IPFS/Traj
+
+swechaind tx ipfs create-coding-traj coding1 "First Code Trajectory" "Initial data" --from alice
+
+## Query All
+swechaind query ipfs list-coding-traj --output json
+{
+  "codingTraj": [
+    {
+      "index": "coding1",
+      "title": "First Code Trajectory",
+      "data": "Initial data",
+      "creator": "cosmos1w4aglj3z0ls0js6l7hlk9tw0hgrtpqg7alnuyy"
+    }
+  ],
+  "pagination": {
+    "total": "1"
+  }
+}
+
+## Query 
+swechaind query ipfs show-coding-traj coding1 --output json
+{
+  "codingTraj": {
+    "index": "coding1",
+    "title": "First Code Trajectory",
+    "data": "Initial data",
+    "creator": "cosmos1w4aglj3z0ls0js6l7hlk9tw0hgrtpqg7alnuyy"
+  }
+}
+
+
+## Update then Query
+
+swechaind tx ipfs update-coding-traj coding1 "Updated Title" "Updated
+Data" --from alice --yes
+swechaind query ipfs show-coding-traj coding1 --output json
+{
+  "codingTraj": {
+    "index": "coding1",
+    "title": "Updated Title",
+    "data": "Updated Data",
+    "creator": "cosmos1w4aglj3z0ls0js6l7hlk9tw0hgrtpqg7alnuyy"
+  }
+}
+
+
+## Delete then Query
+
+swechaind tx ipfs delete-coding-traj coding1 --from alice --yes
+swechaind query ipfs show-coding-traj coding1 --output json
+rpc error: code = NotFound desc = rpc error: code = NotFound desc = not found: key not found
+
