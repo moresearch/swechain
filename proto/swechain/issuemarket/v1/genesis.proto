@@ -18,5 +18,6 @@ message GenesisState {
   repeated Auction auctionList  = 2 [(gogoproto.nullable) = false] ;
            uint64  auctionCount = 3;
   repeated Bid     bidList      = 4 [(gogoproto.nullable) = false] ;
+           uint64  bidCount     = 5;
 }
 

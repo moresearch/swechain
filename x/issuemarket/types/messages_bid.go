@@ -1,17 +1,8 @@
 package types
 
-func NewMsgCreateBid(
-	creator string,
-	index string,
-	auctionId string,
-	bidder string,
-	amount string,
-	description string,
-
-) *MsgCreateBid {
+func NewMsgCreateBid(creator string, auctionId string, bidder string, amount string, description string) *MsgCreateBid {
 	return &MsgCreateBid{
 		Creator:     creator,
-		Index:       index,
 		AuctionId:   auctionId,
 		Bidder:      bidder,
 		Amount:      amount,
@@ -19,18 +10,10 @@ func NewMsgCreateBid(
 	}
 }
 
-func NewMsgUpdateBid(
-	creator string,
-	index string,
-	auctionId string,
-	bidder string,
-	amount string,
-	description string,
-
-) *MsgUpdateBid {
+func NewMsgUpdateBid(creator string, id uint64, auctionId string, bidder string, amount string, description string) *MsgUpdateBid {
 	return &MsgUpdateBid{
+		Id:          id,
 		Creator:     creator,
-		Index:       index,
 		AuctionId:   auctionId,
 		Bidder:      bidder,
 		Amount:      amount,
@@ -38,13 +21,9 @@ func NewMsgUpdateBid(
 	}
 }
 
-func NewMsgDeleteBid(
-	creator string,
-	index string,
-
-) *MsgDeleteBid {
+func NewMsgDeleteBid(creator string, id uint64) *MsgDeleteBid {
 	return &MsgDeleteBid{
+		Id:      id,
 		Creator: creator,
-		Index:   index,
 	}
 }

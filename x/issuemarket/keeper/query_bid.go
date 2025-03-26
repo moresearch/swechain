@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"cosmossdk.io/collections"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/moresearch/swechain/x/issuemarket/types"
 	"google.golang.org/grpc/codes"
@@ -20,10 +21,11 @@ func (q queryServer) ListBid(ctx context.Context, req *types.QueryAllBidRequest)
 		ctx,
 		q.k.Bid,
 		req.Pagination,
-		func(_ string, value types.Bid) (types.Bid, error) {
+		func(_ uint64, value types.Bid) (types.Bid, error) {
 			return value, nil
 		},
 	)
+
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -36,14 +38,14 @@ func (q queryServer) GetBid(ctx context.Context, req *types.QueryGetBidRequest) 
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	val, err := q.k.Bid.Get(ctx, req.Index)
+	bid, err := q.k.Bid.Get(ctx, req.Id)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
-			return nil, status.Error(codes.NotFound, "not found")
+			return nil, sdkerrors.ErrKeyNotFound
 		}
 
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	return &types.QueryGetBidResponse{Bid: val}, nil
+	return &types.QueryGetBidResponse{Bid: bid}, nil
 }

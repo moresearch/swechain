@@ -37,9 +37,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod:      "GetBid",
 					Use:            "get-bid [id]",
-					Short:          "Gets a bid",
+					Short:          "Gets a bid by id",
 					Alias:          []string{"show-bid"},
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
@@ -72,21 +72,21 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "CreateBid",
-					Use:            "create-bid [index] [auctionId] [bidder] [amount] [description]",
-					Short:          "Create a new bid",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"}, {ProtoField: "auctionId"}, {ProtoField: "bidder"}, {ProtoField: "amount"}, {ProtoField: "description"}},
+					Use:            "create-bid [auctionId] [bidder] [amount] [description]",
+					Short:          "Create bid",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "auctionId"}, {ProtoField: "bidder"}, {ProtoField: "amount"}, {ProtoField: "description"}},
 				},
 				{
 					RpcMethod:      "UpdateBid",
-					Use:            "update-bid [index] [auctionId] [bidder] [amount] [description]",
+					Use:            "update-bid [id] [auctionId] [bidder] [amount] [description]",
 					Short:          "Update bid",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"}, {ProtoField: "auctionId"}, {ProtoField: "bidder"}, {ProtoField: "amount"}, {ProtoField: "description"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}, {ProtoField: "auctionId"}, {ProtoField: "bidder"}, {ProtoField: "amount"}, {ProtoField: "description"}},
 				},
 				{
 					RpcMethod:      "DeleteBid",
-					Use:            "delete-bid [index]",
+					Use:            "delete-bid [id]",
 					Short:          "Delete bid",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "index"}},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "id"}},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},

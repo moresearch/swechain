@@ -33,7 +33,7 @@ service Query {
   
   // Queries a list of Bid items.
   rpc GetBid  (QueryGetBidRequest) returns (QueryGetBidResponse) {
-    option (google.api.http).get = "/moresearch/swechain/issuemarket/bid/{index}";
+    option (google.api.http).get = "/moresearch/swechain/issuemarket/bid/{id}";
   
   }
   rpc ListBid (QueryAllBidRequest) returns (QueryAllBidResponse) {
@@ -69,11 +69,11 @@ message QueryAllAuctionResponse {
 }
 
 message QueryGetBidRequest {
-  string index = 1;
+  uint64 id = 1;
 }
 
 message QueryGetBidResponse {
-  Bid bid = 1 [(gogoproto.nullable) = false];
+  Bid Bid = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryAllBidRequest {
@@ -81,7 +81,7 @@ message QueryAllBidRequest {
 }
 
 message QueryAllBidResponse {
-  repeated Bid                                    bid        = 1 [(gogoproto.nullable) = false];
+  repeated Bid                                    Bid        = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

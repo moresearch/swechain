@@ -2,9 +2,9 @@ package keeper_test
 
 import (
 	"context"
-	"strconv"
 	"testing"
 
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
@@ -18,8 +18,10 @@ import (
 func createNBid(keeper keeper.Keeper, ctx context.Context, n int) []types.Bid {
 	items := make([]types.Bid, n)
 	for i := range items {
-		items[i].Index = strconv.Itoa(i)
-		_ = keeper.Bid.Set(ctx, items[i].Index, items[i])
+		iu := uint64(i)
+		items[i].Id = iu
+		_ = keeper.Bid.Set(ctx, iu, items[i])
+		_ = keeper.BidSeq.Set(ctx, iu)
 	}
 	return items
 }
@@ -35,25 +37,19 @@ func TestBidQuerySingle(t *testing.T) {
 		err      error
 	}{
 		{
-			desc: "First",
-			request: &types.QueryGetBidRequest{
-				Index: msgs[0].Index,
-			},
+			desc:     "First",
+			request:  &types.QueryGetBidRequest{Id: msgs[0].Id},
 			response: &types.QueryGetBidResponse{Bid: msgs[0]},
 		},
 		{
-			desc: "Second",
-			request: &types.QueryGetBidRequest{
-				Index: msgs[1].Index,
-			},
+			desc:     "Second",
+			request:  &types.QueryGetBidRequest{Id: msgs[1].Id},
 			response: &types.QueryGetBidResponse{Bid: msgs[1]},
 		},
 		{
-			desc: "KeyNotFound",
-			request: &types.QueryGetBidRequest{
-				Index: strconv.Itoa(100000),
-			},
-			err: status.Error(codes.NotFound, "not found"),
+			desc:    "KeyNotFound",
+			request: &types.QueryGetBidRequest{Id: uint64(len(msgs))},
+			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
 			desc: "InvalidRequest",

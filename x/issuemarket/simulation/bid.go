@@ -2,7 +2,6 @@ package simulation
 
 import (
 	"math/rand"
-	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -24,15 +23,8 @@ func SimulateMsgCreateBid(
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 
-		i := r.Int()
 		msg := &types.MsgCreateBid{
 			Creator: simAccount.Address.String(),
-			Index:   strconv.Itoa(i),
-		}
-
-		found, err := k.Bid.Has(ctx, msg.Index)
-		if err == nil && found {
-			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "Bid already exist"), nil, nil
 		}
 
 		txCtx := simulation.OperationInput{
@@ -68,7 +60,7 @@ func SimulateMsgUpdateBid(
 		)
 
 		var allBid []types.Bid
-		err := k.Bid.Walk(ctx, nil, func(key string, value types.Bid) (stop bool, err error) {
+		err := k.Bid.Walk(ctx, nil, func(key uint64, value types.Bid) (stop bool, err error) {
 			allBid = append(allBid, value)
 			return false, nil
 		})
@@ -92,7 +84,7 @@ func SimulateMsgUpdateBid(
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "bid creator not found"), nil, nil
 		}
 		msg.Creator = simAccount.Address.String()
-		msg.Index = bid.Index
+		msg.Id = bid.Id
 
 		txCtx := simulation.OperationInput{
 			R:               r,
@@ -122,12 +114,12 @@ func SimulateMsgDeleteBid(
 		var (
 			simAccount = simtypes.Account{}
 			bid        = types.Bid{}
-			msg        = &types.MsgUpdateBid{}
+			msg        = &types.MsgDeleteBid{}
 			found      = false
 		)
 
 		var allBid []types.Bid
-		err := k.Bid.Walk(ctx, nil, func(key string, value types.Bid) (stop bool, err error) {
+		err := k.Bid.Walk(ctx, nil, func(key uint64, value types.Bid) (stop bool, err error) {
 			allBid = append(allBid, value)
 			return false, nil
 		})
@@ -151,7 +143,7 @@ func SimulateMsgDeleteBid(
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "bid creator not found"), nil, nil
 		}
 		msg.Creator = simAccount.Address.String()
-		msg.Index = bid.Index
+		msg.Id = bid.Id
 
 		txCtx := simulation.OperationInput{
 			R:               r,

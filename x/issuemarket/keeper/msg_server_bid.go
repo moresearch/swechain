@@ -16,43 +16,55 @@ func (k msgServer) CreateBid(ctx context.Context, msg *types.MsgCreateBid) (*typ
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidAddress, fmt.Sprintf("invalid address: %s", err))
 	}
 
-	// Check if the value already exists
-	ok, err := k.Bid.Has(ctx, msg.Index)
+	nextId, err := k.BidSeq.Next(ctx)
 	if err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
-	} else if ok {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "index already set")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "failed to get next id")
 	}
 
 	var bid = types.Bid{
+		Id:          nextId,
 		Creator:     msg.Creator,
-		Index:       msg.Index,
 		AuctionId:   msg.AuctionId,
 		Bidder:      msg.Bidder,
 		Amount:      msg.Amount,
 		Description: msg.Description,
 	}
 
-	if err := k.Bid.Set(ctx, bid.Index, bid); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
+	if err = k.Bid.Set(
+		ctx,
+		nextId,
+		bid,
+	); err != nil {
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "failed to set bid")
 	}
 
-	return &types.MsgCreateBidResponse{}, nil
+	return &types.MsgCreateBidResponse{
+		Id: nextId,
+	}, nil
 }
 
 func (k msgServer) UpdateBid(ctx context.Context, msg *types.MsgUpdateBid) (*types.MsgUpdateBidResponse, error) {
 	if _, err := k.addressCodec.StringToBytes(msg.Creator); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidAddress, fmt.Sprintf("invalid signer address: %s", err))
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidAddress, fmt.Sprintf("invalid address: %s", err))
 	}
 
-	// Check if the value exists
-	val, err := k.Bid.Get(ctx, msg.Index)
+	var bid = types.Bid{
+		Creator:     msg.Creator,
+		Id:          msg.Id,
+		AuctionId:   msg.AuctionId,
+		Bidder:      msg.Bidder,
+		Amount:      msg.Amount,
+		Description: msg.Description,
+	}
+
+	// Checks that the element exists
+	val, err := k.Bid.Get(ctx, msg.Id)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
-			return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, "index not set")
+			return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
 		}
 
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "failed to get bid")
 	}
 
 	// Checks if the msg creator is the same as the current owner
@@ -60,16 +72,7 @@ func (k msgServer) UpdateBid(ctx context.Context, msg *types.MsgUpdateBid) (*typ
 		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	var bid = types.Bid{
-		Creator:     msg.Creator,
-		Index:       msg.Index,
-		AuctionId:   msg.AuctionId,
-		Bidder:      msg.Bidder,
-		Amount:      msg.Amount,
-		Description: msg.Description,
-	}
-
-	if err := k.Bid.Set(ctx, bid.Index, bid); err != nil {
+	if err := k.Bid.Set(ctx, msg.Id, bid); err != nil {
 		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "failed to update bid")
 	}
 
@@ -78,17 +81,17 @@ func (k msgServer) UpdateBid(ctx context.Context, msg *types.MsgUpdateBid) (*typ
 
 func (k msgServer) DeleteBid(ctx context.Context, msg *types.MsgDeleteBid) (*types.MsgDeleteBidResponse, error) {
 	if _, err := k.addressCodec.StringToBytes(msg.Creator); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidAddress, fmt.Sprintf("invalid signer address: %s", err))
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidAddress, fmt.Sprintf("invalid address: %s", err))
 	}
 
-	// Check if the value exists
-	val, err := k.Bid.Get(ctx, msg.Index)
+	// Checks that the element exists
+	val, err := k.Bid.Get(ctx, msg.Id)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
-			return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, "index not set")
+			return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
 		}
 
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "failed to get bid")
 	}
 
 	// Checks if the msg creator is the same as the current owner
@@ -96,8 +99,8 @@ func (k msgServer) DeleteBid(ctx context.Context, msg *types.MsgDeleteBid) (*typ
 		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	if err := k.Bid.Remove(ctx, msg.Index); err != nil {
-		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "failed to remove bid")
+	if err := k.Bid.Remove(ctx, msg.Id); err != nil {
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "failed to delete bid")
 	}
 
 	return &types.MsgDeleteBidResponse{}, nil

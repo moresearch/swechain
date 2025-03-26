@@ -22,3 +22,8 @@ var (
 	AuctionKey      = collections.NewPrefix("auction/value/")
 	AuctionCountKey = collections.NewPrefix("auction/count/")
 )
+
+var (
+	BidKey      = collections.NewPrefix("bid/value/")
+	BidCountKey = collections.NewPrefix("bid/count/")
+)

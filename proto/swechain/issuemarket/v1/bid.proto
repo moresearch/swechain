@@ -4,11 +4,10 @@ package swechain.issuemarket.v1;
 option go_package = "github.com/moresearch/swechain/x/issuemarket/types";
 
 message Bid {
-  string index = 1; 
+  uint64 id = 1;
   string auctionId = 2; 
   string bidder = 3; 
   string amount = 4; 
   string description = 5; 
   string creator = 6;
 }
-

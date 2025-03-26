@@ -23,7 +23,8 @@ type Keeper struct {
 	Params     collections.Item[types.Params]
 	AuctionSeq collections.Sequence
 	Auction    collections.Map[uint64, types.Auction]
-	Bid        collections.Map[string, types.Bid]
+	BidSeq     collections.Sequence
+	Bid        collections.Map[uint64, types.Bid]
 }
 
 func NewKeeper(
@@ -45,7 +46,7 @@ func NewKeeper(
 		addressCodec: addressCodec,
 		authority:    authority,
 
-		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)), AuctionSeq: collections.NewSequence(sb, types.AuctionCountKey, "auction_seq"), Auction: collections.NewMap(sb, types.AuctionKey, "auction", collections.Uint64Key, codec.CollValue[types.Auction](cdc)), Bid: collections.NewMap(sb, types.BidKey, "bid", collections.StringKey, codec.CollValue[types.Bid](cdc)),
+		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)), AuctionSeq: collections.NewSequence(sb, types.AuctionCountKey, "auction_seq"), Auction: collections.NewMap(sb, types.AuctionKey, "auction", collections.Uint64Key, codec.CollValue[types.Auction](cdc)), BidSeq: collections.NewSequence(sb, types.BidCountKey, "bid_seq"), Bid: collections.NewMap(sb, types.BidKey, "bid", collections.Uint64Key, codec.CollValue[types.Bid](cdc)),
 	}
 
 	schema, err := sb.Build()

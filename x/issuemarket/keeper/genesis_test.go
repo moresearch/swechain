@@ -11,7 +11,7 @@ import (
 
 func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
-		Params: types.DefaultParams(), AuctionList: []types.Auction{{Id: 0}, {Id: 1}}, AuctionCount: 2, BidList: []types.Bid{{Index: "0"}, {Index: "1"}},
+		Params: types.DefaultParams(), AuctionList: []types.Auction{{Id: 0}, {Id: 1}}, AuctionCount: 2, BidList: []types.Bid{{Id: 0}, {Id: 1}}, BidCount: 2,
 	}
 
 	f := initFixture(t)
@@ -28,5 +28,6 @@ func TestGenesis(t *testing.T) {
 	require.ElementsMatch(t, genesisState.AuctionList, got.AuctionList)
 	require.Equal(t, genesisState.AuctionCount, got.AuctionCount)
 	require.ElementsMatch(t, genesisState.BidList, got.BidList)
+	require.Equal(t, genesisState.BidCount, got.BidCount)
 
 }

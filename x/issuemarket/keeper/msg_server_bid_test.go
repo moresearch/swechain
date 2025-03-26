@@ -1,7 +1,6 @@
 package keeper_test
 
 import (
-	"strconv"
 	"testing"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -14,18 +13,14 @@ import (
 func TestBidMsgServerCreate(t *testing.T) {
 	f := initFixture(t)
 	srv := keeper.NewMsgServerImpl(f.keeper)
+
 	creator, err := f.addressCodec.BytesToString([]byte("signerAddr__________________"))
 	require.NoError(t, err)
 
 	for i := 0; i < 5; i++ {
-		expected := &types.MsgCreateBid{Creator: creator,
-			Index: strconv.Itoa(i),
-		}
-		_, err := srv.CreateBid(f.ctx, expected)
+		resp, err := srv.CreateBid(f.ctx, &types.MsgCreateBid{Creator: creator})
 		require.NoError(t, err)
-		rst, err := f.keeper.Bid.Get(f.ctx, expected.Index)
-		require.NoError(t, err)
-		require.Equal(t, expected.Creator, rst.Creator)
+		require.Equal(t, i, int(resp.Id))
 	}
 }
 
@@ -39,10 +34,7 @@ func TestBidMsgServerUpdate(t *testing.T) {
 	unauthorizedAddr, err := f.addressCodec.BytesToString([]byte("unauthorizedAddr___________"))
 	require.NoError(t, err)
 
-	expected := &types.MsgCreateBid{Creator: creator,
-		Index: strconv.Itoa(0),
-	}
-	_, err = srv.CreateBid(f.ctx, expected)
+	_, err = srv.CreateBid(f.ctx, &types.MsgCreateBid{Creator: creator})
 	require.NoError(t, err)
 
 	tests := []struct {
@@ -51,31 +43,23 @@ func TestBidMsgServerUpdate(t *testing.T) {
 		err     error
 	}{
 		{
-			desc: "invalid address",
-			request: &types.MsgUpdateBid{Creator: "invalid",
-				Index: strconv.Itoa(0),
-			},
-			err: sdkerrors.ErrInvalidAddress,
+			desc:    "invalid address",
+			request: &types.MsgUpdateBid{Creator: "invalid"},
+			err:     sdkerrors.ErrInvalidAddress,
 		},
 		{
-			desc: "unauthorized",
-			request: &types.MsgUpdateBid{Creator: unauthorizedAddr,
-				Index: strconv.Itoa(0),
-			},
-			err: sdkerrors.ErrUnauthorized,
+			desc:    "unauthorized",
+			request: &types.MsgUpdateBid{Creator: unauthorizedAddr},
+			err:     sdkerrors.ErrUnauthorized,
 		},
 		{
-			desc: "key not found",
-			request: &types.MsgUpdateBid{Creator: creator,
-				Index: strconv.Itoa(100000),
-			},
-			err: sdkerrors.ErrKeyNotFound,
+			desc:    "key not found",
+			request: &types.MsgUpdateBid{Creator: creator, Id: 10},
+			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
-			desc: "completed",
-			request: &types.MsgUpdateBid{Creator: creator,
-				Index: strconv.Itoa(0),
-			},
+			desc:    "completed",
+			request: &types.MsgUpdateBid{Creator: creator},
 		},
 	}
 	for _, tc := range tests {
@@ -85,9 +69,6 @@ func TestBidMsgServerUpdate(t *testing.T) {
 				require.ErrorIs(t, err, tc.err)
 			} else {
 				require.NoError(t, err)
-				rst, err := f.keeper.Bid.Get(f.ctx, expected.Index)
-				require.NoError(t, err)
-				require.Equal(t, expected.Creator, rst.Creator)
 			}
 		})
 	}
@@ -103,9 +84,7 @@ func TestBidMsgServerDelete(t *testing.T) {
 	unauthorizedAddr, err := f.addressCodec.BytesToString([]byte("unauthorizedAddr___________"))
 	require.NoError(t, err)
 
-	_, err = srv.CreateBid(f.ctx, &types.MsgCreateBid{Creator: creator,
-		Index: strconv.Itoa(0),
-	})
+	_, err = srv.CreateBid(f.ctx, &types.MsgCreateBid{Creator: creator})
 	require.NoError(t, err)
 
 	tests := []struct {
@@ -114,31 +93,23 @@ func TestBidMsgServerDelete(t *testing.T) {
 		err     error
 	}{
 		{
-			desc: "invalid address",
-			request: &types.MsgDeleteBid{Creator: "invalid",
-				Index: strconv.Itoa(0),
-			},
-			err: sdkerrors.ErrInvalidAddress,
+			desc:    "invalid address",
+			request: &types.MsgDeleteBid{Creator: "invalid"},
+			err:     sdkerrors.ErrInvalidAddress,
 		},
 		{
-			desc: "unauthorized",
-			request: &types.MsgDeleteBid{Creator: unauthorizedAddr,
-				Index: strconv.Itoa(0),
-			},
-			err: sdkerrors.ErrUnauthorized,
+			desc:    "unauthorized",
+			request: &types.MsgDeleteBid{Creator: unauthorizedAddr},
+			err:     sdkerrors.ErrUnauthorized,
 		},
 		{
-			desc: "key not found",
-			request: &types.MsgDeleteBid{Creator: creator,
-				Index: strconv.Itoa(100000),
-			},
-			err: sdkerrors.ErrKeyNotFound,
+			desc:    "key not found",
+			request: &types.MsgDeleteBid{Creator: creator, Id: 10},
+			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
-			desc: "completed",
-			request: &types.MsgDeleteBid{Creator: creator,
-				Index: strconv.Itoa(0),
-			},
+			desc:    "completed",
+			request: &types.MsgDeleteBid{Creator: creator},
 		},
 	}
 	for _, tc := range tests {
@@ -148,9 +119,6 @@ func TestBidMsgServerDelete(t *testing.T) {
 				require.ErrorIs(t, err, tc.err)
 			} else {
 				require.NoError(t, err)
-				found, err := f.keeper.Bid.Has(f.ctx, tc.request.Index)
-				require.NoError(t, err)
-				require.False(t, found)
 			}
 		})
 	}

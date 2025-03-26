@@ -19,11 +19,7 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 		accs[i] = acc.Address.String()
 	}
 	issuemarketGenesis := types.GenesisState{
-		Params: types.DefaultParams(), AuctionList: []types.Auction{{Id: 0, Creator: sample.AccAddress()}, {Id: 1, Creator: sample.AccAddress()}}, AuctionCount: 2, BidList: []types.Bid{{Creator: sample.AccAddress(),
-			Index: "0",
-		}, {Creator: sample.AccAddress(),
-			Index: "1",
-		}},
+		Params: types.DefaultParams(), AuctionList: []types.Auction{{Id: 0, Creator: sample.AccAddress()}, {Id: 1, Creator: sample.AccAddress()}}, AuctionCount: 2, BidList: []types.Bid{{Id: 0, Creator: sample.AccAddress()}, {Id: 1, Creator: sample.AccAddress()}}, BidCount: 2,
 	}
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&issuemarketGenesis)
 }

@@ -80,19 +80,20 @@ message MsgDeleteAuctionResponse {}
 message MsgCreateBid {
   option (cosmos.msg.v1.signer) = "creator";
   string creator     = 1;
-  string index       = 2;
-  string auctionId   = 3;
-  string bidder      = 4;
-  string amount      = 5;
-  string description = 6;
+  string auctionId   = 2;
+  string bidder      = 3;
+  string amount      = 4;
+  string description = 5;
 }
 
-message MsgCreateBidResponse {}
+message MsgCreateBidResponse {
+  uint64 id = 1;
+}
 
 message MsgUpdateBid {
   option (cosmos.msg.v1.signer) = "creator";
   string creator     = 1;
-  string index       = 2;
+  uint64 id          = 2;
   string auctionId   = 3;
   string bidder      = 4;
   string amount      = 5;
@@ -104,7 +105,7 @@ message MsgUpdateBidResponse {}
 message MsgDeleteBid {
   option (cosmos.msg.v1.signer) = "creator";
   string creator = 1;
-  string index   = 2;
+  uint64 id      = 2;
 }
 
 message MsgDeleteBidResponse {}

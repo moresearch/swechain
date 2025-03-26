@@ -67,10 +67,10 @@ import (
 	icatypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
-	_ "github.com/moresearch/swechain/x/ipfs/module"
-	ipfsmoduletypes "github.com/moresearch/swechain/x/ipfs/types"
 	_ "github.com/moresearch/swechain/x/issuemarket/module"
 	issuemarketmoduletypes "github.com/moresearch/swechain/x/issuemarket/types"
+	_ "github.com/moresearch/swechain/x/swechain/module"
+	swechainmoduletypes "github.com/moresearch/swechain/x/swechain/types"
 )
 
 var (
@@ -125,8 +125,8 @@ var (
 						// ibc modules
 						ibcexported.ModuleName,
 						// chain modules
+						swechainmoduletypes.ModuleName,
 						issuemarketmoduletypes.ModuleName,
-						ipfsmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/beginBlockers
 					},
 					EndBlockers: []string{
@@ -135,8 +135,8 @@ var (
 						feegrant.ModuleName,
 						group.ModuleName,
 						// chain modules
+						swechainmoduletypes.ModuleName,
 						issuemarketmoduletypes.ModuleName,
-						ipfsmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/endBlockers
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
@@ -172,8 +172,8 @@ var (
 						ibctransfertypes.ModuleName,
 						icatypes.ModuleName,
 						// chain modules
+						swechainmoduletypes.ModuleName,
 						issuemarketmoduletypes.ModuleName,
-						ipfsmoduletypes.ModuleName,
 						// this line is used by starport scaffolding # stargate/app/initGenesis
 					},
 				}),
@@ -266,12 +266,12 @@ var (
 				Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
 			},
 			{
-				Name:   issuemarketmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&issuemarketmoduletypes.Module{}),
+				Name:   swechainmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&swechainmoduletypes.Module{}),
 			},
 			{
-				Name:   ipfsmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&ipfsmoduletypes.Module{}),
+				Name:   issuemarketmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&issuemarketmoduletypes.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

@@ -25,14 +25,16 @@ func (gs GenesisState) Validate() error {
 		}
 		auctionIdMap[elem.Id] = true
 	}
-	bidIndexMap := make(map[string]struct{})
-
+	bidIdMap := make(map[uint64]bool)
+	bidCount := gs.GetBidCount()
 	for _, elem := range gs.BidList {
-		index := fmt.Sprint(elem.Index)
-		if _, ok := bidIndexMap[index]; ok {
-			return fmt.Errorf("duplicated index for bid")
+		if _, ok := bidIdMap[elem.Id]; ok {
+			return fmt.Errorf("duplicated id for bid")
 		}
-		bidIndexMap[index] = struct{}{}
+		if elem.Id >= bidCount {
+			return fmt.Errorf("bid id should be lower or equal than the last id")
+		}
+		bidIdMap[elem.Id] = true
 	}
 
 	return gs.Params.Validate()
