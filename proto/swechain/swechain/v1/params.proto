@@ -1,0 +1,15 @@
+syntax = "proto3";
+package swechain.swechain.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/moresearch/swechain/x/swechain/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "swechain/x/swechain/Params";
+  option (gogoproto.equal) = true;
+
+  
+}
