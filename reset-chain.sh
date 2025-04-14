@@ -82,32 +82,32 @@ setup_accounts() {
   echo "$FAUCET_MNEMONIC" | $BINARY keys add faucet --keyring-backend $KEYRING --recover
   
   # Add agent accounts
-#  $BINARY keys add agent1 --keyring-backend $KEYRING
-#  $BINARY keys add agent2 --keyring-backend $KEYRING
-#  $BINARY keys add agent3 --keyring-backend $KEYRING
-#  $BINARY keys add agent4 --keyring-backend $KEYRING
-#  $BINARY keys add agent5 --keyring-backend $KEYRING
-#  $BINARY keys add agent6 --keyring-backend $KEYRING
+  $BINARY keys add agent1 --keyring-backend $KEYRING
+  $BINARY keys add agent2 --keyring-backend $KEYRING
+  $BINARY keys add agent3 --keyring-backend $KEYRING
+  $BINARY keys add agent4 --keyring-backend $KEYRING
+  $BINARY keys add agent5 --keyring-backend $KEYRING
+  $BINARY keys add agent6 --keyring-backend $KEYRING
   
   # Get addresses
   VALIDATOR_ADDR=$($BINARY keys show validator --keyring-backend $KEYRING -a)
   FAUCET_ADDR=$($BINARY keys show faucet --keyring-backend $KEYRING -a)
-  #AGENT1_ADDR=$($BINARY keys show agent1 --keyring-backend $KEYRING -a)
-  #AGENT2_ADDR=$($BINARY keys show agent2 --keyring-backend $KEYRING -a)
-  #AGENT3_ADDR=$($BINARY keys show agent3 --keyring-backend $KEYRING -a)
-  #AGENT4_ADDR=$($BINARY keys show agent4 --keyring-backend $KEYRING -a)
-  #AGENT5_ADDR=$($BINARY keys show agent5 --keyring-backend $KEYRING -a)
-  #AGENT6_ADDR=$($BINARY keys show agent6 --keyring-backend $KEYRING -a)
+  AGENT1_ADDR=$($BINARY keys show agent1 --keyring-backend $KEYRING -a)
+  AGENT2_ADDR=$($BINARY keys show agent2 --keyring-backend $KEYRING -a)
+  AGENT3_ADDR=$($BINARY keys show agent3 --keyring-backend $KEYRING -a)
+  AGENT4_ADDR=$($BINARY keys show agent4 --keyring-backend $KEYRING -a)
+  AGENT5_ADDR=$($BINARY keys show agent5 --keyring-backend $KEYRING -a)
+  AGENT6_ADDR=$($BINARY keys show agent6 --keyring-backend $KEYRING -a)
   
   # Add genesis accounts with sufficient funds
   $BINARY genesis add-genesis-account $VALIDATOR_ADDR 1000000000000$DENOM
   $BINARY genesis add-genesis-account $FAUCET_ADDR 1000000000000$DENOM
-  #$BINARY genesis add-genesis-account $AGENT1_ADDR 100000000$DENOM
-  #$BINARY genesis add-genesis-account $AGENT2_ADDR 100000000$DENOM
-  #$BINARY genesis add-genesis-account $AGENT3_ADDR 100000000$DENOM
-  #$BINARY genesis add-genesis-account $AGENT4_ADDR 100000000$DENOM
-  #$BINARY genesis add-genesis-account $AGENT5_ADDR 100000000$DENOM
-  #$BINARY genesis add-genesis-account $AGENT6_ADDR 100000000$DENOM
+  $BINARY genesis add-genesis-account $AGENT1_ADDR 100000000$DENOM
+ $BINARY genesis add-genesis-account $AGENT2_ADDR 100000000$DENOM
+$BINARY genesis add-genesis-account $AGENT3_ADDR 100000000$DENOM
+ $BINARY genesis add-genesis-account $AGENT4_ADDR 100000000$DENOM
+  $BINARY genesis add-genesis-account $AGENT5_ADDR 100000000$DENOM
+  $BINARY genesis add-genesis-account $AGENT6_ADDR 100000000$DENOM
   
   # Create validator gentx with sufficient delegation
   $BINARY genesis gentx validator 1000000000$DENOM --chain-id $CHAIN_ID --keyring-backend $KEYRING
@@ -220,12 +220,12 @@ check_balances() {
   
   VALIDATOR_ADDR=$($BINARY keys show validator --keyring-backend $KEYRING -a)
   FAUCET_ADDR=$($BINARY keys show faucet --keyring-backend $KEYRING -a)
-  #AGENT1_ADDR=$($BINARY keys show agent1 --keyring-backend $KEYRING -a)
-  #AGENT2_ADDR=$($BINARY keys show agent2 --keyring-backend $KEYRING -a)
-  #AGENT3_ADDR=$($BINARY keys show agent3 --keyring-backend $KEYRING -a)
-  #AGENT4_ADDR=$($BINARY keys show agent4 --keyring-backend $KEYRING -a)
-  #AGENT5_ADDR=$($BINARY keys show agent5 --keyring-backend $KEYRING -a)
-  #AGENT6_ADDR=$($BINARY keys show agent6 --keyring-backend $KEYRING -a)
+  AGENT1_ADDR=$($BINARY keys show agent1 --keyring-backend $KEYRING -a)
+  AGENT2_ADDR=$($BINARY keys show agent2 --keyring-backend $KEYRING -a)
+  AGENT3_ADDR=$($BINARY keys show agent3 --keyring-backend $KEYRING -a)
+  AGENT4_ADDR=$($BINARY keys show agent4 --keyring-backend $KEYRING -a)
+  AGENT5_ADDR=$($BINARY keys show agent5 --keyring-backend $KEYRING -a)
+  AGENT6_ADDR=$($BINARY keys show agent6 --keyring-backend $KEYRING -a)
   
   echo -e "Validator (${VALIDATOR_ADDR}):"
   safe_query "$BINARY query bank balances $VALIDATOR_ADDR --output json | jq"
@@ -233,23 +233,23 @@ check_balances() {
   echo -e "\nFaucet (${FAUCET_ADDR}):"
   safe_query "$BINARY query bank balances $FAUCET_ADDR --output json | jq"
   
-  #echo -e "\nAgent1 (${AGENT1_ADDR}):"
-  #safe_query "$BINARY query bank balances $AGENT1_ADDR --output json | jq"
- # 
- # echo -e "\nAgent2 (${AGENT2_ADDR}):"
- # safe_query "$BINARY query bank balances $AGENT2_ADDR --output json | jq"
- # 
- # echo -e "\nAgent3 (${AGENT3_ADDR}):"
- # safe_query "$BINARY query bank balances $AGENT3_ADDR --output json | jq"
- # 
- # echo -e "\nAgent4 (${AGENT4_ADDR}):"
- # safe_query "$BINARY query bank balances $AGENT4_ADDR --output json | jq"
- # 
- # echo -e "\nAgent5 (${AGENT5_ADDR}):"
- # safe_query "$BINARY query bank balances $AGENT5_ADDR --output json | jq"
- # 
- # echo -e "\nAgent6 (${AGENT6_ADDR}):"
- # safe_query "$BINARY query bank balances $AGENT6_ADDR --output json | jq"
+  echo -e "\nAgent1 (${AGENT1_ADDR}):"
+  safe_query "$BINARY query bank balances $AGENT1_ADDR --output json | jq"
+  
+  echo -e "\nAgent2 (${AGENT2_ADDR}):"
+  safe_query "$BINARY query bank balances $AGENT2_ADDR --output json | jq"
+  
+  echo -e "\nAgent3 (${AGENT3_ADDR}):"
+  safe_query "$BINARY query bank balances $AGENT3_ADDR --output json | jq"
+  
+  echo -e "\nAgent4 (${AGENT4_ADDR}):"
+  safe_query "$BINARY query bank balances $AGENT4_ADDR --output json | jq"
+  
+  echo -e "\nAgent5 (${AGENT5_ADDR}):"
+  safe_query "$BINARY query bank balances $AGENT5_ADDR --output json | jq"
+  
+  echo -e "\nAgent6 (${AGENT6_ADDR}):"
+  safe_query "$BINARY query bank balances $AGENT6_ADDR --output json | jq"
 }
 
 # Display account addresses
@@ -257,12 +257,12 @@ list_accounts() {
   echo -e "${YELLOW}🔑 Account addresses:${NC}"
   echo -e "Validator: $($BINARY keys show validator --keyring-backend $KEYRING -a)"
   echo -e "Faucet: $($BINARY keys show faucet --keyring-backend $KEYRING -a)"
-#  echo -e "Agent1: $($BINARY keys show agent1 --keyring-backend $KEYRING -a)"
-#  echo -e "Agent2: $($BINARY keys show agent2 --keyring-backend $KEYRING -a)"
-#  echo -e "Agent3: $($BINARY keys show agent3 --keyring-backend $KEYRING -a)"
-#  echo -e "Agent4: $($BINARY keys show agent4 --keyring-backend $KEYRING -a)"
-#  echo -e "Agent5: $($BINARY keys show agent5 --keyring-backend $KEYRING -a)"
-#  echo -e "Agent6: $($BINARY keys show agent6 --keyring-backend $KEYRING -a)"
+  echo -e "Agent1: $($BINARY keys show agent1 --keyring-backend $KEYRING -a)"
+  echo -e "Agent2: $($BINARY keys show agent2 --keyring-backend $KEYRING -a)"
+  echo -e "Agent3: $($BINARY keys show agent3 --keyring-backend $KEYRING -a)"
+  echo -e "Agent4: $($BINARY keys show agent4 --keyring-backend $KEYRING -a)"
+  echo -e "Agent5: $($BINARY keys show agent5 --keyring-backend $KEYRING -a)"
+  echo -e "Agent6: $($BINARY keys show agent6 --keyring-backend $KEYRING -a)"
 }
 
 # Add a function to get all balances
